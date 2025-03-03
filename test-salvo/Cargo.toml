@@ -1,0 +1,8 @@
+[package]
+name = "test-salvo"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+salvo = "0.76.2"
+tokio = { version = "1.43.0", features = ["full"] }
