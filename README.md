@@ -7,7 +7,7 @@ cd test-chi
 go build -o test-chi && ./test-chi
 
 drill --benchmark drill.yml --stats --quiet -o 10
-oha -z 30s -c 200 -t 5s http://localhost:3000/
+oha -z 30s -c 200 http://localhost:3000/
 ```
 
 ## Test axum
@@ -17,7 +17,7 @@ cd test-axum
 cargo run --release
 
 drill --benchmark drill.yml --stats --quiet -o 10
-oha -z 30s -c 200 -t 5s http://localhost:3001/
+oha -z 30s -c 200 http://localhost:3001/
 ```
 
 ## Test actix
@@ -27,7 +27,7 @@ cd test-actix
 cargo run --release
 
 drill --benchmark drill.yml --stats --quiet -o 10
-oha -z 30s -c 200 -t 5s http://localhost:3002/
+oha -z 30s -c 200 http://localhost:3002/
 ```
 
 ## Test rocket
@@ -37,7 +37,7 @@ cd test-axum
 cargo run --release
 
 drill --benchmark drill.yml --stats --quiet -o 10
-oha -z 30s -c 200 -t 5s http://localhost:3003/
+oha -z 30s -c 200 http://localhost:3003/
 ```
 
 ## Test zig zap
@@ -47,7 +47,7 @@ cd test-zap
 zig build run
 
 drill --benchmark drill.yml --stats --quiet -o 10
-oha -z 30s -c 200 -t 5s http://localhost:3004/
+oha -z 30s -c 200 http://localhost:3004/
 ```
 
 ## Test salvo
@@ -57,7 +57,7 @@ cd test-salvo
 cargo run --release
 
 drill --benchmark drill.yml --stats --quiet -o 10
-oha -z 30s -c 200 -t 5s http://localhost:3005/
+oha -z 30s -c 200 http://localhost:3005/
 ```
 
 ## Test viz
@@ -67,5 +67,15 @@ cd test-viz
 cargo run --release
 
 drill --benchmark drill.yml --stats --quiet -o 10
-oha -z 30s -c 200 -t 5s http://localhost:3006/
+oha -z 30s -c 200 http://localhost:3006/
+```
+
+## Test ntex
+
+```bash
+cd test-ntex
+cargo run --release
+
+drill --benchmark drill.yml --stats --quiet -o 10
+oha -z 30s -c 200 http://localhost:3007/
 ```
