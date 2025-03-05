@@ -42,6 +42,11 @@ func main() {
 		w.Write([]byte("Hello, World!"))
 	})
 
+	r.Get("/uber-eats/{scope}/{account}/menus/items/{id}", func(w http.ResponseWriter, r *http.Request) {
+		time.Sleep(1_000 * time.Millisecond)
+		w.Write([]byte(fmt.Sprintf("Uber Eats response: %s, %s, %s", chi.URLParam(r, "scope"), chi.URLParam(r, "account"), chi.URLParam(r, "id"))))
+	})
+
 	r.Get("/json", jsonHandler)
 
 	// Consume memory
