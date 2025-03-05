@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -8,12 +9,19 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+const (
+	// MaxWorkers is the number of workers to spawn
+	MaxWorkers = 10
+)
+
 func main() {
+	// runtime.GOMAXPROCS(4)
+
 	// Channel to queue tasks
-	taskQueue := make(chan http.ResponseWriter, 100)
+	taskQueue := make(chan http.ResponseWriter, MaxWorkers)
 
 	// Worker pool
-	for i := 0; i < 100; i++ {
+	for range MaxWorkers {
 		go worker(taskQueue)
 	}
 
@@ -40,6 +48,21 @@ func main() {
 func worker(taskQueue chan http.ResponseWriter) {
 	for w := range taskQueue {
 		time.Sleep(500 * time.Millisecond)
-		w.Write([]byte("Hello, World!"))
+
+		// Call Google
+		httpClient := http.Client{}
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://google.com", nil)
+		if err != nil {
+			return
+		}
+		_, err = httpClient.Do(req)
+		if err != nil {
+			return
+		}
+
+		_ = w
+		// w.Write([]byte("Hello, World!"))
 	}
 }
