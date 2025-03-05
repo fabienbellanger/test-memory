@@ -16,7 +16,7 @@ const (
 )
 
 type Task struct {
-	ID   int    `json:"id"`
+	ID   int64  `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -42,7 +42,7 @@ func main() {
 		tasks := make([]Task, 500)
 		for i := range 500 {
 			tasks[i] = Task{
-				ID:   i + 1,
+				ID:   int64(i + 1),
 				Name: fmt.Sprintf("Task number: %d", i+1),
 			}
 		}
