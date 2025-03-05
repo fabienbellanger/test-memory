@@ -13,6 +13,12 @@ import (
 const (
 	// MaxWorkers is the number of workers to spawn
 	MaxWorkers = 10
+
+	// MaxQueueSize is the maximum number of tasks to queue
+	QueueSize = 100
+
+	// MaxTasks is the maximum number of tasks to process
+	MaxTasks = 1000
 )
 
 type Task struct {
@@ -24,7 +30,7 @@ func main() {
 	// runtime.GOMAXPROCS(4)
 
 	// Channel to queue tasks
-	taskQueue := make(chan http.ResponseWriter, MaxWorkers)
+	taskQueue := make(chan http.ResponseWriter, QueueSize)
 
 	// Worker pool
 	for range MaxWorkers {
@@ -36,24 +42,7 @@ func main() {
 		w.Write([]byte("Hello, World!"))
 	})
 
-	r.Get("/json", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-
-		tasks := make([]Task, 500)
-		for i := range 500 {
-			tasks[i] = Task{
-				ID:   int64(i + 1),
-				Name: fmt.Sprintf("Task number: %d", i+1),
-			}
-		}
-
-		j, err := json.Marshal(tasks)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.Write(j)
-	})
+	r.Get("/json", jsonHandler)
 
 	// Consume memory
 	r.Get("/spawn", func(w http.ResponseWriter, r *http.Request) {
@@ -92,4 +81,23 @@ func worker(taskQueue chan http.ResponseWriter) {
 		_ = w
 		// w.Write([]byte("Hello, World!"))
 	}
+}
+
+func jsonHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	tasks := make([]Task, MaxTasks)
+	for i := range MaxTasks {
+		tasks[i] = Task{
+			ID:   int64(i + 1),
+			Name: fmt.Sprintf("Task number: %d", i+1),
+		}
+	}
+
+	j, err := json.Marshal(tasks)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write(j)
 }
