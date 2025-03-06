@@ -21,7 +21,7 @@ const (
 	QueueSize = 100
 
 	// MaxTasks is the maximum number of tasks to process
-	MaxTasks = 1000
+	MaxTasks = 10_000
 )
 
 type Task struct {
@@ -49,21 +49,14 @@ func main() {
 		rd, _ := rand.Int(rand.Reader, big.NewInt(1001))
 		t := rd.Int64() + 500
 		time.Sleep(time.Duration(t) * time.Millisecond)
+
 		log.Printf("Uber Eats response: %s, %s, timeout: %d", chi.URLParam(r, "account"), chi.URLParam(r, "id"), t)
+
 		w.Write([]byte(fmt.Sprintf("Uber Eats response: %s, %s", chi.URLParam(r, "account"), chi.URLParam(r, "id"))))
 	})
 
 	r.Get("/json", jsonHandler)
-
-	// Consume memory
-	r.Get("/spawn", func(w http.ResponseWriter, r *http.Request) {
-		go func() {
-			time.Sleep(500 * time.Millisecond)
-			w.Write([]byte("Hello, World!"))
-		}()
-	})
-
-	// Consume less memory
+	r.Get("/spawn", spawn)
 	r.Get("/worker", func(w http.ResponseWriter, r *http.Request) {
 		taskQueue <- w
 	})
@@ -72,6 +65,15 @@ func main() {
 	http.ListenAndServe(":3000", r)
 }
 
+// Consume memory
+func spawn(w http.ResponseWriter, r *http.Request) {
+	go func() {
+		time.Sleep(500 * time.Millisecond)
+		w.Write([]byte("Hello, World!"))
+	}()
+}
+
+// Consume less memory
 func worker(taskQueue chan http.ResponseWriter) {
 	for w := range taskQueue {
 		time.Sleep(500 * time.Millisecond)
