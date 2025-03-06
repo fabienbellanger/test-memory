@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"log"
+	"math/big"
 	"net/http"
 	"time"
 
@@ -42,9 +45,12 @@ func main() {
 		w.Write([]byte("Hello, World!"))
 	})
 
-	r.Get("/uber-eats/{scope}/{account}/menus/items/{id}", func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(1_000 * time.Millisecond)
-		w.Write([]byte(fmt.Sprintf("Uber Eats response: %s, %s, %s", chi.URLParam(r, "scope"), chi.URLParam(r, "account"), chi.URLParam(r, "id"))))
+	r.Post("/uber-eats/{account}/menus/items/{id}", func(w http.ResponseWriter, r *http.Request) {
+		rd, _ := rand.Int(rand.Reader, big.NewInt(1001))
+		t := rd.Int64() + 500
+		time.Sleep(time.Duration(t) * time.Millisecond)
+		log.Printf("Uber Eats response: %s, %s, timeout: %d", chi.URLParam(r, "account"), chi.URLParam(r, "id"), t)
+		w.Write([]byte(fmt.Sprintf("Uber Eats response: %s, %s", chi.URLParam(r, "account"), chi.URLParam(r, "id"))))
 	})
 
 	r.Get("/json", jsonHandler)
