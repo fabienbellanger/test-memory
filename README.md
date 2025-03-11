@@ -89,3 +89,13 @@ zig build run
 drill --benchmark drill.yml --stats --quiet -o 10
 oha -z 30s -c 200 http://localhost:3008/
 ```
+
+## Test Tokamak
+
+```bash
+cd test-tokamak
+zig build run
+
+drill --benchmark drill.yml --stats --quiet -o 10
+oha -z 30s -c 200 http://localhost:3009/
+```
