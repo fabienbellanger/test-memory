@@ -79,3 +79,13 @@ cargo run --release
 drill --benchmark drill.yml --stats --quiet -o 10
 oha -z 30s -c 200 http://localhost:3007/
 ```
+
+## Test http.zig
+
+```bash
+cd test-httpzig
+zig build run
+
+drill --benchmark drill.yml --stats --quiet -o 10
+oha -z 30s -c 200 http://localhost:3008/
+```
