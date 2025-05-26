@@ -37,8 +37,8 @@
     // internet connectivity.
     .dependencies = .{
         .tokamak = .{
-            .url = "git+https://github.com/cztomsik/tokamak?ref=main#c9491b312eabbd5683bc236950fd2455c7b07752",
-            .hash = "tokamak-2.0.0-FbnSeSbfAQAIiCUmj1RRpAio0RAHWvRoMFozHcnbeeMb",
+            .url = "git+https://github.com/cztomsik/tokamak?ref=main#82d3518f4029edf62476f97d1e8c8d74a7ba713f",
+            .hash = "tokamak-2.0.0-FbnSebrIAgB1VZiIki03WmiY1bLvLqWXCEjUTP--XpIy",
         },
     },
     .paths = .{
